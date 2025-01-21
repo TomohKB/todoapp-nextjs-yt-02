@@ -1,12 +1,29 @@
+"use client";
+
 import Image from "next/image";
 import AddTask from "./components/AddTask";
 import TodoList from "./components/TodoList";
 import { getAllTodos } from "./api";
+import { useEffect, useState } from "react";
+import { Task } from "./types";
 
-export default async function Home() {
 
-  const todos = await getAllTodos();
-  
+export default function Home() {
+const [todos, setTodos] = useState<Task[]>([]);
+  // const todos = await getAllTodos();
+  useEffect(() => { //画面ロード時、データの取得処理がが走る
+    const fetchTasks = async () => {
+      try {
+        const res = await getAllTodos();
+        setTodos(res);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchTasks();
+    
+  },[]);
+  console.log(todos);
   
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-200">
